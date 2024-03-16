@@ -1650,4 +1650,968 @@ Certainly! Let's continue with the next set of 10 questions:
 
     - This code snippet creates a route for user logout, which logs the user out of the session and redirects them to the homepage.
 
- 
+
+51. **Develop a route to handle user profile picture uploads in Express.js.**
+
+    ```javascript
+    const multer = require('multer');
+    const upload = multer({ dest: 'profile-pictures/' });
+
+    app.post('/upload-profile-picture', upload.single('profilePicture'), (req, res) => {
+        // Logic to handle profile picture upload
+    });
+    ```
+
+    - This code sets up a route for handling profile picture uploads using the multer middleware, allowing users to upload their profile pictures.
+
+52. **Write middleware to handle CORS (Cross-Origin Resource Sharing) in Express.js.**
+
+    ```javascript
+    const cors = require('cors');
+
+    app.use(cors());
+    ```
+
+    - This middleware enables Cross-Origin Resource Sharing, allowing resources on the server to be requested from a different domain.
+
+53. **Implement a route to handle user password changes in Express.js.**
+
+    ```javascript
+    app.put('/change-password', (req, res) => {
+        const { userId } = req.user;
+        const { newPassword } = req.body;
+        // Logic to change user password
+    });
+    ```
+
+    - This code snippet creates a route for handling password changes by authenticated users. It extracts the user ID from the JWT token and processes the password change request.
+
+54. **Develop middleware to authenticate users with OAuth2 in Express.js.**
+
+    ```javascript
+    const passport = require('passport');
+
+    app.get('/auth/oauth2', passport.authenticate('oauth2'));
+    app.get('/auth/oauth2/callback', passport.authenticate('oauth2', { failureRedirect: '/login' }), (req, res) => {
+        // Successful authentication, redirect or respond with data
+    });
+    ```
+
+    - This code sets up routes for initiating OAuth2 authentication and handling the callback after authentication, leveraging Passport.js OAuth2 strategy.
+
+55. **Create a route to handle user data exports in Express.js.**
+
+    ```javascript
+    app.get('/export-data', (req, res) => {
+        // Logic to export user data
+    });
+    ```
+
+    - This code snippet defines a route for exporting user data, allowing users to download their data in a specified format (e.g., CSV, JSON).
+
+56. **Implement a route to handle user notifications in Express.js.**
+
+    ```javascript
+    app.post('/send-notification', (req, res) => {
+        const { userId, message } = req.body;
+        // Logic to send notification to user
+    });
+    ```
+
+    - This code sets up a route for sending notifications to users, allowing the server to push notifications to clients or external services.
+
+57. **Develop middleware to handle request rate limiting based on IP address in Express.js.**
+
+    ```javascript
+    const rateLimit = require('express-rate-limit');
+
+    const limiter = rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100, // limit each IP to 100 requests per windowMs
+        message: 'Too many requests from this IP, please try again later'
+    });
+
+    app.use(limiter);
+    ```
+
+    - This middleware applies rate limiting based on the IP address of incoming requests, preventing abuse by limiting the number of requests per IP.
+
+58. **Create a route to handle user preferences updates in Express.js.**
+
+    ```javascript
+    app.put('/update-preferences', (req, res) => {
+        const { userId } = req.user;
+        const { preferences } = req.body;
+        // Logic to update user preferences
+    });
+    ```
+
+    - This code snippet defines a route for updating user preferences, allowing users to modify their settings or preferences.
+
+59. **Implement middleware to enforce HTTPS in Express.js.**
+
+    ```javascript
+    const enforceHttps = require('express-sslify');
+
+    app.use(enforceHttps.HTTPS({ trustProtoHeader: true }));
+    ```
+
+    - This middleware redirects HTTP requests to HTTPS, ensuring that communication between clients and the server is secure.
+
+60. **Develop a route to handle user session expiration in Express.js.**
+
+    ```javascript
+    app.post('/expire-session', (req, res) => {
+        req.session.destroy();
+        res.send('Session expired');
+    });
+    ```
+
+    - This code snippet creates a route for expiring user sessions, allowing users to manually end their sessions or log out.
+
+
+61. **Create a route to handle user account verification in Express.js.**
+
+    ```javascript
+    app.get('/verify-account/:token', (req, res) => {
+        const token = req.params.token;
+        // Logic to verify user account based on token
+    });
+    ```
+
+    - This code snippet defines a route for handling user account verification based on a verification token sent via email.
+
+62. **Implement middleware to parse and validate JWT tokens in Express.js.**
+
+    ```javascript
+    const jwt = require('jsonwebtoken');
+
+    const authenticateToken = (req, res, next) => {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        if (token == null) return res.sendStatus(401);
+
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            if (err) return res.sendStatus(403);
+            req.user = user;
+            next();
+        });
+    };
+
+    app.use(authenticateToken);
+    ```
+
+    - This middleware function parses and verifies JWT tokens sent in the Authorization header of incoming requests, ensuring authentication for protected routes.
+
+63. **Develop a route to handle user password resets in Express.js.**
+
+    ```javascript
+    app.post('/reset-password', (req, res) => {
+        const { email, newPassword } = req.body;
+        // Logic to reset user password
+    });
+    ```
+
+    - This code snippet creates a route for handling user password resets, allowing users to request a new password via email.
+
+64. **Write middleware to parse cookies in Express.js.**
+
+    ```javascript
+    const cookieParser = require('cookie-parser');
+
+    app.use(cookieParser());
+    ```
+
+    - This middleware function parses cookies attached to incoming requests, making them accessible via the `req.cookies` object.
+
+65. **Implement a route to handle user profile deletion in Express.js.**
+
+    ```javascript
+    app.delete('/delete-profile', (req, res) => {
+        const { userId } = req.user;
+        // Logic to delete user profile
+    });
+    ```
+
+    - This code defines a route for deleting user profiles, allowing users to permanently remove their accounts and associated data.
+
+66. **Develop middleware to enforce content security policies in Express.js.**
+
+    ```javascript
+    const helmet = require('helmet');
+
+    app.use(helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", 'trusted-scripts.com'],
+            styleSrc: ["'self'", 'styles.com'],
+            // Add more directives as needed
+        }
+    }));
+    ```
+
+    - This middleware function enforces content security policies to mitigate risks associated with XSS (Cross-Site Scripting) attacks.
+
+67. **Create a route to handle user account deactivation in Express.js.**
+
+    ```javascript
+    app.post('/deactivate-account', (req, res) => {
+        const { userId } = req.user;
+        // Logic to deactivate user account
+    });
+    ```
+
+    - This code snippet defines a route for deactivating user accounts, allowing users to temporarily disable their accounts.
+
+68. **Implement middleware to handle HTTP request caching in Express.js.**
+
+    ```javascript
+    const morgan = require('morgan');
+
+    app.use(morgan('dev'));
+    ```
+
+    - This middleware function enables request logging using the Morgan library, providing information about incoming HTTP requests.
+
+69. **Develop a route to handle user data imports in Express.js.**
+
+    ```javascript
+    app.post('/import-data', (req, res) => {
+        // Logic to import user data from external source
+    });
+    ```
+
+    - This code defines a route for importing user data into the system from an external source, such as a CSV file or database.
+
+70. **Create middleware to enforce request validation in Express.js.**
+
+    ```javascript
+    const expressValidator = require('express-validator');
+
+    app.use(expressValidator());
+    ```
+
+    - This middleware function adds request validation capabilities to Express.js applications, allowing developers to validate request parameters, body, query strings, etc.
+
+
+71. **Develop a route to handle user session management in Express.js.**
+
+    ```javascript
+    app.post('/login', (req, res) => {
+        const { username, password } = req.body;
+        // Logic to authenticate user and create session
+    });
+
+    app.get('/logout', (req, res) => {
+        // Logic to destroy session and logout user
+    });
+    ```
+
+    - This code snippet creates routes for user login and logout, allowing users to start and end their sessions.
+
+72. **Write middleware to compress response bodies in Express.js.**
+
+    ```javascript
+    const compression = require('compression');
+
+    app.use(compression());
+    ```
+
+    - This middleware function enables response compression, reducing the size of response bodies for faster transmission over the network.
+
+73. **Implement a route to handle user feedback submissions in Express.js.**
+
+    ```javascript
+    app.post('/submit-feedback', (req, res) => {
+        const { userId, feedback } = req.body;
+        // Logic to process and store user feedback
+    });
+    ```
+
+    - This code sets up a route for users to submit feedback, allowing them to provide comments, suggestions, or bug reports.
+
+74. **Develop middleware to handle CSRF (Cross-Site Request Forgery) protection in Express.js.**
+
+    ```javascript
+    const csurf = require('csurf');
+    const csrfProtection = csurf({ cookie: true });
+
+    app.use(csrfProtection);
+    ```
+
+    - This middleware function adds CSRF protection by generating and validating CSRF tokens, preventing unauthorized requests.
+
+75. **Create a route to handle user account upgrades in Express.js.**
+
+    ```javascript
+    app.put('/upgrade-account', (req, res) => {
+        const { userId } = req.user;
+        // Logic to upgrade user account (e.g., to premium)
+    });
+    ```
+
+    - This code snippet defines a route for upgrading user accounts, allowing users to unlock additional features or services.
+
+76. **Implement middleware to enforce HTTPS in Express.js.**
+
+    ```javascript
+    const enforceHTTPS = require('express-sslify');
+
+    app.use(enforceHTTPS.HTTPS({ trustProtoHeader: true }));
+    ```
+
+    - This middleware function redirects HTTP requests to HTTPS, ensuring secure communication between clients and the server.
+
+77. **Develop a route to handle user search functionality in Express.js.**
+
+    ```javascript
+    app.get('/search', (req, res) => {
+        const { query } = req.query;
+        // Logic to search for users based on query
+    });
+    ```
+
+    - This code creates a route for handling user search requests, allowing users to search for other users based on specified criteria.
+
+78. **Create middleware to log request and response data in Express.js.**
+
+    ```javascript
+    const morgan = require('morgan');
+
+    app.use(morgan('dev'));
+    ```
+
+    - This middleware function enables request logging, providing information about incoming HTTP requests and their responses.
+
+79. **Implement a route to handle user password changes in Express.js.**
+
+    ```javascript
+    app.put('/change-password', (req, res) => {
+        const { userId } = req.user;
+        const { newPassword } = req.body;
+        // Logic to change user password
+    });
+    ```
+
+    - This code snippet defines a route for users to change their passwords, allowing them to update their account security credentials.
+
+80. **Develop middleware to handle request rate limiting in Express.js.**
+
+    ```javascript
+    const rateLimit = require('express-rate-limit');
+
+    const limiter = rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100 // limit each IP to 100 requests per windowMs
+    });
+
+    app.use(limiter);
+    ```
+
+    - This middleware function applies rate limiting to incoming requests, preventing abuse or excessive usage of server resources.
+
+
+
+81. **Develop a route to handle user role management in Express.js.**
+
+    ```javascript
+    app.put('/update-role', (req, res) => {
+        const { userId } = req.user;
+        const { newRole } = req.body;
+        // Logic to update user role
+    });
+    ```
+
+    - This code snippet creates a route for updating user roles, allowing administrators to modify the roles of users.
+
+82. **Implement middleware to authenticate users with OAuth2 in Express.js.**
+
+    ```javascript
+    const passport = require('passport');
+
+    app.get('/auth/oauth2', passport.authenticate('oauth2'));
+    app.get('/auth/oauth2/callback', passport.authenticate('oauth2', { failureRedirect: '/login' }), (req, res) => {
+        // Successful authentication, redirect or respond with data
+    });
+    ```
+
+    - This middleware configures routes for initiating OAuth2 authentication and handling the callback after authentication, leveraging Passport.js OAuth2 strategy.
+
+83. **Create a route to handle user data exports in Express.js.**
+
+    ```javascript
+    app.get('/export-data', (req, res) => {
+        // Logic to export user data
+    });
+    ```
+
+    - This code defines a route for exporting user data, allowing users to download their data in a specified format (e.g., CSV, JSON).
+
+84. **Develop middleware to handle WebSocket connections in Express.js.**
+
+    ```javascript
+    const WebSocket = require('ws');
+
+    const wss = new WebSocket.Server({ server });
+
+    wss.on('connection', (ws) => {
+        ws.on('message', (message) => {
+            console.log(`Received message: ${message}`);
+        });
+        ws.send('Connected to WebSocket server');
+    });
+    ```
+
+    - This middleware sets up a WebSocket server using the ws library and handles incoming connections, allowing real-time communication between clients and the server.
+
+85. **Implement a route to handle GraphQL queries in Express.js.**
+
+    ```javascript
+    const { graphqlHTTP } = require('express-graphql');
+    const schema = require('./schema');
+
+    app.use('/graphql', graphqlHTTP({
+        schema,
+        graphiql: true
+    }));
+    ```
+
+    - This code snippet creates a route for handling GraphQL queries using the express-graphql middleware and provides a graphical interface for testing queries.
+
+86. **Develop middleware to enforce content security policies in Express.js.**
+
+    ```javascript
+    const helmet = require('helmet');
+
+    app.use(helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", 'trusted-scripts.com'],
+            styleSrc: ["'self'", 'styles.com'],
+            // Add more directives as needed
+        }
+    }));
+    ```
+
+    - This middleware adds content security policies to protect against various web vulnerabilities such as XSS (Cross-Site Scripting) attacks.
+
+87. **Create a route to handle image resizing using Sharp in Express.js.**
+
+    ```javascript
+    const sharp = require('sharp');
+
+    app.get('/resize-image', (req, res) => {
+        sharp('input.jpg')
+            .resize(200, 300)
+            .toFile('output.jpg', (err, info) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.send('Image resized successfully');
+                }
+            });
+    });
+    ```
+
+    - This code defines a route for resizing images using the Sharp library, allowing users to upload images and receive resized versions.
+
+88. **Implement middleware to parse and validate JSON web tokens (JWT) in Express.js.**
+
+    ```javascript
+    const jwt = require('jsonwebtoken');
+
+    const authenticateToken = (req, res, next) => {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        if (token == null) return res.sendStatus(401);
+
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            if (err) return res.sendStatus(403);
+            req.user = user;
+            next();
+        });
+    };
+
+    app.use(authenticateToken);
+    ```
+
+    - This middleware parses and verifies JWT tokens sent in the Authorization header of incoming requests, ensuring authentication for protected routes.
+
+89. **Develop a route to handle user password resets via email in Express.js.**
+
+    ```javascript
+    app.post('/reset-password', (req, res) => {
+        const { email } = req.body;
+        // Logic to send password reset email
+    });
+    ```
+
+    - This code sets up a route for initiating user password resets via email, allowing users to request a password reset link.
+
+90. **Create middleware to sanitize input data in Express.js.**
+
+    ```javascript
+    const sanitize = require('sanitize-html');
+
+    const sanitizeInput = (req, res, next) => {
+        req.body = sanitize(req.body);
+        next();
+    };
+
+    app.use(sanitizeInput);
+    ```
+
+    - This middleware function sanitizes input data by removing potentially harmful HTML or script tags, enhancing security against XSS attacks.
+
+
+91. **Develop a route to handle user authentication using JWT (JSON Web Tokens) in Express.js.**
+
+    ```javascript
+    const jwt = require('jsonwebtoken');
+
+    app.post('/login', (req, res) => {
+        // Authenticate user credentials
+        const { username, password } = req.body;
+
+        // Example authentication logic
+        if (username === 'user' && password === 'password') {
+            // Generate JWT token
+            const token = jwt.sign({ username }, process.env.ACCESS_TOKEN_SECRET);
+            res.json({ token });
+        } else {
+            res.status(401).json({ error: 'Invalid credentials' });
+        }
+    });
+    ```
+
+    - This code snippet creates a route for user login where the user provides their credentials. Upon successful authentication, a JWT token is generated and sent back as a response.
+
+92. **Implement middleware to verify JWT tokens for protected routes in Express.js.**
+
+    ```javascript
+    const jwt = require('jsonwebtoken');
+
+    const authenticateToken = (req, res, next) => {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+
+        if (!token) return res.sendStatus(401);
+
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            if (err) return res.sendStatus(403);
+            req.user = user;
+            next();
+        });
+    };
+
+    app.use(authenticateToken);
+    ```
+
+    - This middleware function verifies JWT tokens attached to incoming requests, ensuring that only authenticated users can access protected routes.
+
+93. **Create a route to handle user registration in Express.js.**
+
+    ```javascript
+    app.post('/register', (req, res) => {
+        // Process registration data
+        const { username, email, password } = req.body;
+        // Logic to create new user account
+    });
+    ```
+
+    - This code defines a route for user registration where users provide their username, email, and password to create a new account.
+
+94. **Develop middleware to handle form validation in Express.js.**
+
+    ```javascript
+    const { body, validationResult } = require('express-validator');
+
+    app.post('/submit-form', 
+        body('email').isEmail(),
+        body('password').isLength({ min: 6 }),
+        (req, res) => {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
+            // Proceed with form submission logic
+        }
+    );
+    ```
+
+    - This middleware function validates form data using the express-validator library, ensuring that email addresses are valid and passwords meet certain criteria.
+
+95. **Implement a route to handle user profile updates in Express.js.**
+
+    ```javascript
+    app.put('/profile', (req, res) => {
+        // Update user profile
+        const { userId } = req.user;
+        const { name, email } = req.body;
+        // Logic to update user profile
+    });
+    ```
+
+    - This code snippet creates a route for updating user profiles, allowing users to modify their name, email, or other profile information.
+
+96. **Develop middleware to handle file uploads in Express.js.**
+
+    ```javascript
+    const multer = require('multer');
+
+    const storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, 'uploads/');
+        },
+        filename: (req, file, cb) => {
+            cb(null, Date.now() + '-' + file.originalname);
+        }
+    });
+
+    const upload = multer({ storage });
+
+    app.post('/upload', upload.single('file'), (req, res) => {
+        // Process uploaded file
+        res.send('File uploaded successfully');
+    });
+    ```
+
+    - This middleware function handles file uploads using the multer library, allowing users to upload files to the server.
+
+97. **Create a route to handle user logout in Express.js.**
+
+    ```javascript
+    app.get('/logout', (req, res) => {
+        // Destroy user session or JWT token
+        res.send('Logged out successfully');
+    });
+    ```
+
+    - This code defines a route for user logout, allowing users to terminate their session or invalidate their JWT token.
+
+98. **Implement middleware to handle session management in Express.js.**
+
+    ```javascript
+    const session = require('express-session');
+
+    app.use(session({
+        secret: 'secret-key',
+        resave: false,
+        saveUninitialized: false
+    }));
+    ```
+
+    - This middleware function enables session management in Express.js, providing a mechanism for storing user session data.
+
+99. **Develop a route to handle user password resets in Express.js.**
+
+    ```javascript
+    app.post('/reset-password', (req, res) => {
+        // Process password reset request
+        const { email } = req.body;
+        // Logic to send password reset instructions to the user
+    });
+    ```
+
+    - This code sets up a route for initiating user password resets, allowing users to request instructions for resetting their password.
+
+100. **Create middleware to handle error handling in Express.js.**
+
+    ```javascript
+    app.use((err, req, res, next) => {
+        console.error(err.stack);
+        res.status(500).send('Something broke!');
+    });
+    ```
+
+    - This middleware function handles errors that occur during request processing, providing a centralized mechanism for
+
+
+101. **Develop middleware to handle file uploads in Express.js.**
+
+    ```javascript
+    const multer = require('multer');
+    const upload = multer({ dest: 'uploads/' });
+
+    app.post('/upload-file', upload.single('file'), (req, res) => {
+        // Logic to handle uploaded file
+    });
+    ```
+
+    - This code sets up middleware using multer to handle file uploads, allowing users to upload files to the server.
+102. **Implement a route to handle user authentication with Passport.js in Express.js.**
+
+    ```javascript
+    const passport = require('passport');
+
+    app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }));
+    ```
+
+    - This code snippet creates a route for user authentication using Passport.js with the local strategy.
+
+103. **Create middleware to handle request validation in Express.js.**
+
+    ```javascript
+    const { body, validationResult } = require('express-validator');
+
+    app.post('/user', body('email').isEmail(), (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        // Logic to handle valid user data
+    });
+    ```
+
+    - This middleware function validates request body parameters using express-validator, ensuring that incoming data meets specified criteria.
+
+104. **Develop a route to handle user profile updates in Express.js.**
+
+    ```javascript
+    app.put('/profile', (req, res) => {
+        const { userId } = req.user;
+        const { name, email } = req.body;
+
+        // Logic to update user profile
+        res.send('Profile updated successfully');
+    });
+    ```
+
+    - This code snippet creates a route for handling user profile updates. It extracts user ID from the JWT token and updates the user's profile information accordingly.
+
+105. **Implement middleware to parse cookies in Express.js.**
+
+    ```javascript
+    const cookieParser = require('cookie-parser');
+
+    app.use(cookieParser());
+    ```
+
+    - This middleware function parses cookies attached to incoming requests, making them accessible via the `req.cookies` object.
+
+106. **Create a route to handle user password changes in Express.js.**
+
+    ```javascript
+    app.put('/change-password', (req, res) => {
+        const { userId } = req.user;
+        const { newPassword } = req.body;
+
+        // Logic to change user password
+        res.send('Password changed successfully');
+    });
+    ```
+
+    - This code snippet defines a route for users to change their passwords, allowing them to update their account security credentials.
+
+107. **Develop middleware to authenticate users based on JWT tokens in Express.js.**
+
+    ```javascript
+    const jwt = require('jsonwebtoken');
+
+    const authenticateToken = (req, res, next) => {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        if (token == null) return res.sendStatus(401);
+
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            if (err) return res.sendStatus(403);
+            req.user = user;
+            next();
+        });
+    };
+
+    app.use(authenticateToken);
+    ```
+
+    - This middleware function verifies JWT tokens passed in the 'Authorization' header of incoming requests. If the token is valid, it proceeds to the next middleware; otherwise, it sends a 403 Forbidden status.
+
+108. **Implement a route to handle user logout in Express.js.**
+
+    ```javascript
+    app.get('/logout', (req, res) => {
+        req.logout(); // Assuming passport.js is used for session management
+        res.redirect('/login');
+    });
+    ```
+
+    - This code snippet creates a route for user logout, which logs the user out of the session and redirects them to the login page.
+
+109. **Develop middleware to handle request rate limiting based on IP address in Express.js.**
+
+    ```javascript
+    const rateLimit = require('express-rate-limit');
+
+    const limiter = rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100, // limit each IP to 100 requests per windowMs
+        message: 'Too many requests from this IP, please try again later'
+    });
+
+    app.use(limiter);
+    ```
+
+    - This middleware applies rate limiting based on the IP address of incoming requests, preventing abuse by limiting the number of requests per IP.
+
+110. **Create a route to handle user registration in Express.js.**
+
+    ```javascript
+    app.post('/register', (req, res) => {
+        const { username, email, password } = req.body;
+
+        // Logic to create user account
+        res.send('User registered successfully');
+    });
+    ```
+
+    - This code defines a route for user registration, allowing new users to sign up and create an account.
+
+
+121. **Develop middleware to handle CSRF (Cross-Site Request Forgery) protection in Express.js.**
+
+    ```javascript
+    const csrf = require('csurf');
+
+    app.use(csrf({ cookie: true }));
+    ```
+
+    - This middleware function adds CSRF protection to Express.js applications by generating and validating CSRF tokens.
+
+122. **Implement a route to handle user data exports in Express.js.**
+
+    ```javascript
+    app.get('/export-data', (req, res) => {
+        // Logic to export user data
+    });
+    ```
+
+    - This code defines a route for exporting user data, allowing users to download their data in various formats such as CSV or JSON.
+
+123. **Develop middleware to handle WebSocket connections in Express.js.**
+
+    ```javascript
+    const WebSocket = require('ws');
+
+    const wss = new WebSocket.Server({ server });
+
+    wss.on('connection', (ws) => {
+        ws.on('message', (message) => {
+            console.log(`Received message: ${message}`);
+        });
+        ws.send('Connected to WebSocket server');
+    });
+    ```
+
+    - This middleware sets up a WebSocket server using the ws library and handles incoming connections, enabling real-time communication between clients and the server.
+
+124. **Create a route to handle GraphQL queries in Express.js.**
+
+    ```javascript
+    const { graphqlHTTP } = require('express-graphql');
+    const schema = require('./schema');
+
+    app.use('/graphql', graphqlHTTP({
+        schema,
+        graphiql: true
+    }));
+    ```
+
+    - This code snippet creates a route for handling GraphQL queries using the express-graphql middleware and provides a graphical interface for testing queries.
+
+125. **Develop middleware to enforce content security policies in Express.js.**
+
+    ```javascript
+    const helmet = require('helmet');
+
+    app.use(helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", 'trusted-scripts.com'],
+            styleSrc: ["'self'", 'styles.com'],
+            // Add more directives as needed
+        }
+    }));
+    ```
+
+    - This middleware adds content security policies to protect against various web vulnerabilities such as XSS (Cross-Site Scripting) attacks.
+
+126. **Create a route to handle image resizing using Sharp in Express.js.**
+
+    ```javascript
+    const sharp = require('sharp');
+
+    app.get('/resize-image', (req, res) => {
+        sharp('input.jpg')
+            .resize(200, 300)
+            .toFile('output.jpg', (err, info) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.send('Image resized successfully');
+                }
+            });
+    });
+    ```
+
+    - This code defines a route for resizing images using the Sharp library, allowing users to upload images and receive resized versions.
+
+127. **Implement middleware to parse and validate JSON web tokens (JWT) in Express.js.**
+
+    ```javascript
+    const jwt = require('jsonwebtoken');
+
+    const authenticateToken = (req, res, next) => {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        if (token == null) return res.sendStatus(401);
+
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            if (err) return res.sendStatus(403);
+            req.user = user;
+            next();
+        });
+    };
+
+    app.use(authenticateToken);
+    ```
+
+    - This middleware function parses and verifies JWT tokens sent in the Authorization header of incoming requests, ensuring authentication for protected routes.
+
+128. **Develop a route to handle user password resets via email in Express.js.**
+
+    ```javascript
+    app.post('/reset-password', (req, res) => {
+        const { email } = req.body;
+        // Logic to send password reset email
+    });
+    ```
+
+    - This code sets up a route for initiating user password resets via email, allowing users to request a password reset link.
+
+129. **Create middleware to sanitize input data in Express.js.**
+
+    ```javascript
+    const sanitize = require('sanitize-html');
+
+    const sanitizeInput = (req, res, next) => {
+        req.body = sanitize(req.body);
+        next();
+    };
+
+    app.use(sanitizeInput);
+    ```
+
+    - This middleware function sanitizes input data by removing potentially harmful HTML or script tags, enhancing security against XSS attacks.
+
+130. **Implement a route to handle user logout in Express.js.**
+
+    ```javascript
+    app.get('/logout', (req, res) => {
+        req.logout(); // Assuming passport.js is used for session management
+        res.redirect('/login');
+    });
+    ```
+
+    - This code snippet creates a route for user logout, which logs the user out of the session and redirects them to the login page.
+
